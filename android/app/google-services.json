@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "613196672783",
+    "project_id": "mystical-sphinx-403605",
+    "storage_bucket": "mystical-sphinx-403605.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613196672783:android:ca9a5889269caccb36987a",
+        "android_client_info": {
+          "package_name": "com.example.your_app_name"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoV124eFm7Bm-0Ceg44va-ht9v02XZtn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
