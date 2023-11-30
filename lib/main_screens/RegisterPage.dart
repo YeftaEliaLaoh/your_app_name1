@@ -6,7 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:validators/validators.dart' as validator;
-
+import 'package:get/get.dart';
+import 'package:task/controllers/auth_controller.dart' ;
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
   static String id = '/RegisterPage';
@@ -18,7 +19,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late String name;
+  late String username;
   late String email;
   late String password;
 
@@ -33,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthController authController = Get.put(AuthController());
 
   Future<User?> _handleSignIn() async {
     // hold the instance of the authenticated user
@@ -107,11 +109,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       TextField(
                         keyboardType: TextInputType.text,
                         onChanged: (value) {
-                          name = value;
+                          username = value;
                         },
                         decoration: const InputDecoration(
-                          hintText: 'Full Name',
-                          labelText: 'Full Name',
+                          hintText: 'User Name',
+                          labelText: 'User Name',
                         ),
                       ),
                       const SizedBox(height: 20.0),
@@ -160,9 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             _showSpinner = true;
                           });
                           final newUser =
-                              await _auth.createUserWithEmailAndPassword(
-                            email: email,
-                            password: password,
+                              await authController.register(username, email, password,
                           );
                           if (newUser != null) {
                             print('user authenticated by registration');
