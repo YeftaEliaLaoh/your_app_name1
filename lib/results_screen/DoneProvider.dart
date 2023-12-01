@@ -12,6 +12,7 @@ Our Github URL : https://github.com/weblineindia
 
 // ignore: must_be_immutable
 class DoneProvider extends StatelessWidget {
+  static String id = '/DoneProvider';
   // This widget is the root of your application.
   Map<int, Color> color = {
     50: const Color.fromRGBO(250, 202, 88, .1),

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:task/results_screen/DoneProvider.dart';
 import 'package:task/results_screen/ForgotPassword.dart';
 import 'package:task/main_screens/LoginPage.dart';
 import 'package:task/main_screens/RegisterPage.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       '/RegisterPage': (BuildContext context) => const RegisterPage(),
       '/ForgotPassword': (BuildContext context) => ForgotPassword(),
       '/Done': (BuildContext context) => const Done(),
+      '/DoneProvider': (BuildContext context) => DoneProvider(),
     },
     );
   }

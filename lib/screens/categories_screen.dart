@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:task/data/dummy_categories.dart';
-import 'package:task/util/dimens.dart';
-import 'package:task/widgets/category_item.dart';
+import 'package:task/dummy_data.dart';
+import 'package:task/screens/category_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  static const String routeName = "/";
-
-  const CategoriesScreen({Key? key}) : super(key: key);
+  const CategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GridView(
-      padding: gridViewPaddingAll,
-      gridDelegate: gridViewDelegate,
+      padding: const EdgeInsets.all(25),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        childAspectRatio: 3 / 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+      ),
       children: dummyCategories
-          .map((category) => CategoryItem(
-                category.id,
-                category.title,
-                category.color,
-              ))
+          .map(
+            (catData) => CategoryItem(catData.id, catData.title, catData.color),
+          )
           .toList(),
     );
   }

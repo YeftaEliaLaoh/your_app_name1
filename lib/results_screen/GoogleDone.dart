@@ -7,12 +7,11 @@ class GoogleDone extends StatelessWidget {
   late GoogleSignIn _googleSignIn;
   late User _user;
 
-  GoogleDone(User user, GoogleSignIn signIn) {
+  GoogleDone(User user, GoogleSignIn signIn, {super.key}) {
     _user = user;
     _googleSignIn = signIn;
-
-    print(_user);
-    print(_googleSignIn);
+    debugPrint('GoogleDone1: $_user');
+    debugPrint('GoogleDone2: $_googleSignIn');
   }
 
   @override

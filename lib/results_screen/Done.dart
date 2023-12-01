@@ -19,14 +19,14 @@ class _DoneState extends State<Done> {
   void getCurrentUser() async {
     try {
       //TODO 10 : New user variable to check if a newUser is signed in
-      final user = await _auth.currentUser;
+      final user = _auth.currentUser;
       //Equal to null if no user is signed in, else equal to new user details
       //TODO 11 : Use if else block to get the loggedInUser details
       if (user != null) {
         loggedInUser = user;
       }
     } catch (e) {
-      print(e);
+      debugPrint('getCurrentUser: $e');
     }
   }
 
@@ -50,7 +50,7 @@ class _DoneState extends State<Done> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomRight,
-              stops: [0.5, 1],
+              stops: const [0.5, 1],
               colors: [
                 Colors.black.withOpacity(.9),
                 Colors.black.withOpacity(.2)

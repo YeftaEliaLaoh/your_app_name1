@@ -11,7 +11,8 @@ class BottomNavigation extends StatelessWidget {
   Color backgroundColor;
   // ignore: sort_constructors_first
   BottomNavigation(
-      {required this.arrBottomItems,
+      {super.key, 
+      required this.arrBottomItems,
       required this.showSelectedLables,
       required this.showUnselectedLables,
       required this.backgroundColor,

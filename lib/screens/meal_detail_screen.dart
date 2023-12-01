@@ -1,50 +1,43 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:task/util/constants.dart';
-import 'package:task/util/dimens.dart';
+import 'package:task/dummy_data.dart';
 
-import '../data/dummy_meals.dart';
-
-class MealDetailsScreen extends StatelessWidget {
-  static const routeName = 'meals_details';
+class MealDetailScreen extends StatelessWidget {
   final Function toggleFavorite;
   final Function isFavorite;
-
-  const MealDetailsScreen(
-      {Key? key, required this.toggleFavorite, required this.isFavorite})
-      : super(key: key);
-
-  Widget buildSectionTitle(BuildContext context, String text) {
+  const MealDetailScreen(this.toggleFavorite, this.isFavorite, {super.key});
+  static const routName = '/mealDetail';
+  Widget buildSectionTitle(BuildContext context, String title) {
     return Container(
-      margin: sectionTitleMargin,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        text,
-        style: Theme.of(context).textTheme.titleMedium,
+        title,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     );
   }
 
-  Widget buildContainer(MediaQueryData mediaQuery, Widget child) {
+  Widget buildContainer(Widget child) {
     return Container(
-      height: mediaQuery.size.height * 0.3,
-      width: mediaQuery.size.width * 0.9,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
-        borderRadius: mealDetailContainerBorderRadius,
+        borderRadius: BorderRadius.circular(10),
       ),
-      margin: mealDetailContainerMargin,
-      padding: mealDetailContainerPadding,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      height: 150,
+      width: 300,
       child: child,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final mealId = ModalRoute.of(context)?.settings.arguments as String;
-    final selectedMeal = dummyMeals.firstWhere((meal) => meal.id == mealId);
-    final mediaQuery = MediaQuery.of(context);
+    final mealID = ModalRoute.of(context)!.settings.arguments as String;
+    final selectedMeal = DUMMY_MEALS.firstWhere(
+      (meal) => meal.id == mealID,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedMeal.title),
@@ -52,65 +45,56 @@ class MealDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Hero(
-              tag: selectedMeal.imageUrl,
-              child: SizedBox(
-                height: mediaQuery.size.height * 0.4,
-                width: double.infinity,
-                child: Image.network(
-                  selectedMeal.imageUrl,
-                  fit: BoxFit.cover,
-                ),
+            Container(
+              height: 250,
+              width: double.infinity,
+              child: Image.network(
+                selectedMeal.imageUrl,
+                fit: BoxFit.cover,
               ),
             ),
-            buildSectionTitle(context, ingredients),
+            buildSectionTitle(context, 'Ingredients'),
             buildContainer(
-              mediaQuery,
               ListView.builder(
-                itemBuilder: (context, index) {
+                itemBuilder: ((context, index) {
                   return Card(
                     color: Theme.of(context).colorScheme.secondary,
                     child: Padding(
-                      padding: mealDetailIngredientCardPadding,
-                      child: Text(selectedMeal.ingredients[index]),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        child: Text(selectedMeal.ingredients[index])),
                   );
-                },
+                }),
                 itemCount: selectedMeal.ingredients.length,
               ),
             ),
-            buildSectionTitle(context, steps),
+            buildSectionTitle(context, "Steps"),
             buildContainer(
-                mediaQuery,
-                ListView.builder(
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            child: Text("# ${index + 1}"),
-                          ),
-                          title: Text(selectedMeal.steps[index]),
+              ListView.builder(
+                itemBuilder: ((context, index) {
+                  return Column(children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        child: Text(
+                          '# ${index + 1}',
+                          style: const TextStyle(color: Colors.black),
                         ),
-                        const Divider()
-                      ],
-                    );
-                  },
-                  itemCount: selectedMeal.steps.length,
-                ))
+                      ),
+                      title: Text(selectedMeal.steps[index]),
+                    ),
+                    const Divider(),
+                  ]);
+                }),
+                itemCount: selectedMeal.steps.length,
+              ),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          toggleFavorite(mealId);
-          Timer(const Duration(seconds: popDelay), () {
-            Navigator.of(context).pop(mealId);
-          });
-        },
-        child: Icon(isFavorite(mealId) ? Icons.star : Icons.star_border),
+        onPressed: () => toggleFavorite(mealID),
+        child: Icon(isFavorite(mealID) ? Icons.star : Icons.star_border),
       ),
     );
   }

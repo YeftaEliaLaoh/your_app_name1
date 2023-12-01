@@ -1,84 +1,126 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'app_bottom_navigation.dart';
-import 'bottom_screens/first_view.dart';
-import 'bottom_screens/fourth_view.dart';
-import 'bottom_screens/second_view.dart';
-import 'bottom_screens/third_view.dart';
+import 'package:task/models/meal.dart';
+import 'package:task/screens/tabs_screen.dart';
+import 'package:task/screens/categories_meals_screen.dart';
+import 'package:task/screens/filters_screen.dart';
+import 'package:task/screens/meal_detail_screen.dart';
+import 'package:task/dummy_data.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends StatelessWidget {
-  Map<int, Color> color = {
-    50: const Color.fromRGBO(250, 202, 88, .1),
-    100: const Color.fromRGBO(250, 202, 88, .2),
-    200: const Color.fromRGBO(250, 202, 88, .3),
-    300: const Color.fromRGBO(250, 202, 88, .4),
-    400: const Color.fromRGBO(250, 202, 88, .5),
-    500: const Color.fromRGBO(250, 202, 88, .6),
-    600: const Color.fromRGBO(250, 202, 88, .7),
-    700: const Color.fromRGBO(250, 202, 88, .8),
-    800: const Color.fromRGBO(250, 202, 88, .9),
-    900: const Color.fromRGBO(250, 202, 88, 1),
-  };
+class HomeScreen extends StatefulWidget {
+   static String id = '/LoginPage';
 
-  final arrBottomItems = [
-    tabItem('First View', Icons.home),
-    tabItem('Second View', Icons.category),
-    tabItem('Third View', Icons.favorite),
-    tabItem('Fourth View', Icons.search),
-  ];
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreen createState() => _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
+
+  Map<String, bool> _filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
+  void _setFilters(Map<String, bool> filterData) {
+    _filters = filterData;
+
+    _availableMeals = DUMMY_MEALS.where((meal) {
+      if (_filters['gluten']! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (_filters['lactose']! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (_filters['vegan']! && !meal.isVegan) {
+        return false;
+      }
+      if (_filters['vegetarian']! && !meal.isVegetarian) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  void _toggleFavorite(String mealId) {
+    final existingIndex =
+        _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    if (existingIndex >= 0) {
+      setState(() {
+        _favoriteMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        _favoriteMeals.add(
+          DUMMY_MEALS.firstWhere((meal) => meal.id == mealId),
+        );
+      });
+    }
+  }
+
+  bool _isMealFavorite(String id) {
+    return _favoriteMeals.any((meal) => meal.id == id);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final MaterialColor colorCustom = MaterialColor(0xFFFACA58, color);
-    return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Consumer<BottomNavigatorProvider>(
-            builder: (ctx, item, child) {
-              if (item.selectedIndex == 1) {
-                return const Text('Second View',
-                    style: TextStyle(color: Colors.white));
-              } else if (item.selectedIndex == 2) {
-                return const Text('Third View',
-                    style: TextStyle(color: Colors.white));
-              } else if (item.selectedIndex == 3) {
-                return const Text('Fourth View',
-                    style: TextStyle(color: Colors.white));
-              } 
-              else{
-                return const Text(
-                  'First View',
-                  style: TextStyle(color: Colors.white));
-              }
-            },
-          ),
-          ),
-      body: Center(
-        child: Consumer<BottomNavigatorProvider>(
-          builder: (ctx, item, child) {
-            switch (item.selectedIndex) {
-              case 1:
-                return SecondView();
-              case 2:
-                return ThirdView();
-              case 3:
-                return FourthView();
-              default:
-                return FirstView();
-            }
-          },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Raleway',
+        appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blueGrey,
+          accentColor: Color.fromARGB(255, 234, 184, 195),
         ),
+        canvasColor: const Color.fromRGBO(255, 254, 229, 1),
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyLarge: const TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+              bodyMedium: const TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+              bodySmall: const TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+              titleLarge: const TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              titleMedium: const TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              titleSmall: const TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
       ),
-      bottomNavigationBar: BottomNavigation(
-          arrBottomItems: arrBottomItems,
-          backgroundColor: colorCustom,
-          showSelectedLables: true,
-          showUnselectedLables: true,
-          color: Colors.black,
-          selectedColor: Colors.white),
+      title: "IkiMeal",
+      //home: CategoriesScreen(),
+      initialRoute: '/', //default is '/'
+      routes: {
+        '/': (context) => TabsScreen(_favoriteMeals),
+        // '/category-meals': (context) => CategoryMealScreen(),
+        CategoryMealScreen.routName: (context) =>
+            CategoryMealScreen(_availableMeals),
+        MealDetailScreen.routName: (context) =>
+            MealDetailScreen(_toggleFavorite, _isMealFavorite),
+        FiltersScreen.routName: (context) =>
+            FiltersScreen(_filters, _setFilters),
+      },
+      onUnknownRoute: (settings) {
+        MaterialPageRoute(
+          builder: ((context) => TabsScreen(_favoriteMeals)),
+        );
+      },
     );
   }
 }

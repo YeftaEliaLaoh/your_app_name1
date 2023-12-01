@@ -1,12 +1,12 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:task/results_screen/Done.dart';
-import 'package:task/results_screen/GoogleDone.dart';
-import 'package:task/main_screens/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:validators/validators.dart' as validator;
 import 'package:get/get.dart';
+import 'package:task/main_screens/LoginPage.dart';
+import 'package:task/results_screen/GoogleDone.dart';
 import 'package:task/controllers/auth_controller.dart' ;
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -161,14 +161,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           setState(() {
                             _showSpinner = true;
                           });
-                          final newUser =
-                              await authController.register(username, email, password,
+                          await authController.register(username, email, password,
                           );
-                          if (newUser != null) {
-                            print('user authenticated by registration');
+                          if (authController.isExist.value) {
+                            log('user authenticated by registration');
                             //Navigator.pushNamed(context, Done.id);
                             Navigator.of(context).pushReplacementNamed(LoginPage.id);
-
                           }
                         }
 

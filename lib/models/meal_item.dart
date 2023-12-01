@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task/models/meal.dart';
 import 'package:task/screens/meal_detail_screen.dart';
-import 'package:task/util/dimens.dart';
 
 class MealItem extends StatelessWidget {
   final String id;

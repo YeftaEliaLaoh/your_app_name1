@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:task/controllers/auth_controller.dart' ;
+import 'package:task/results_screen/DoneProvider.dart';
 import 'package:task/results_screen/ForgotPassword.dart';
 import 'package:task/results_screen/GoogleDone.dart';
 import 'package:task/main_screens/RegisterPage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../results_screen/Done.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 bool _wrongEmail = false;
 bool _wrongPassword = false;
@@ -30,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthController authController = Get.put(AuthController());
 
   Future<User?> _handleSignIn() async {
     // hold the instance of the authenticated user
@@ -172,13 +175,12 @@ class _LoginPageState extends State<LoginPage> {
                           _wrongEmail = false;
                           _wrongPassword = false;
                         });
-                        final newUser = await _auth.signInWithEmailAndPassword(
-                            email: email, password: password);
-                        if (newUser != null) {
-                          Navigator.pushNamed(context, Done.id);
+                        await authController.login( email, password);
+                        if (authController.isExist.value) {
+                          Navigator.pushNamed(context, DoneProvider.id);
                         }
                       } catch (e) {
-                        print(e);
+                        debugPrint('LoginPage1: $e');
                         if (e == 'ERROR_WRONG_PASSWORD') {
                           setState(() {
                             _wrongPassword = true;
