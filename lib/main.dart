@@ -5,6 +5,7 @@ import 'package:task/results_screen/ForgotPassword.dart';
 import 'package:task/main_screens/LoginPage.dart';
 import 'package:task/main_screens/RegisterPage.dart';
 import 'results_screen/Done.dart';
+import 'results_screen/Home.dart';
 import 'firebase_options.dart';
 
 
@@ -33,6 +34,8 @@ class MyApp extends StatelessWidget {
       '/ForgotPassword': (BuildContext context) => ForgotPassword(),
       '/Done': (BuildContext context) => const Done(),
       '/DoneProvider': (BuildContext context) => DoneProvider(),
+      '/Home': (BuildContext context) => Home(),
+
     },
     );
   }

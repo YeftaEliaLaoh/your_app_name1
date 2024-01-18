@@ -7,6 +7,7 @@ import 'package:task/controllers/auth_controller.dart' ;
 import 'package:task/results_screen/DoneProvider.dart';
 import 'package:task/results_screen/ForgotPassword.dart';
 import 'package:task/results_screen/GoogleDone.dart';
+import 'package:task/results_screen/Home.dart';
 import 'package:task/main_screens/RegisterPage.dart';
 
 bool _wrongEmail = false;
@@ -177,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                         await authController.login( email, password);
                         if (authController.isExist.value) {
-                          Navigator.pushNamed(context, DoneProvider.id);
+                          Navigator.pushNamed(context, Home.id);
                         }
                       } catch (e) {
                         debugPrint('LoginPage1: $e');

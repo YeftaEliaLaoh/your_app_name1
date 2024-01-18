@@ -46,6 +46,10 @@ dependencies:
   validators: ^3.0.0
   dio: ^5.3.4
   get: ^4.6.6
+  choice: ^2.3.0
+  url_launcher: ^6.1.12
+  theme_patrol: ^2.2.1
+
 
 dev_dependencies:
   flutter_test:
